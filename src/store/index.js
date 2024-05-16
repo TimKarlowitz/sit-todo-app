@@ -23,6 +23,12 @@ export default createStore({
     deleteTask(state, taskId) {
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
     },
+    updateTaskTitle(state, { taskId, newTitle }) {
+      const task = state.tasks.find((task) => task.id === taskId);
+      if (task) {
+        task.title = newTitle;
+      }
+    },
   },
   actions: {
     async fetchTasks({ commit }) {
@@ -39,6 +45,9 @@ export default createStore({
     },
     deleteTask({ commit }, taskId) {
       commit("deleteTask", taskId);
+    },
+    updateTaskTitle({ commit }, payload) {
+      commit("updateTaskTitle", payload);
     },
   },
   getters: {
