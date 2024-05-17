@@ -35,6 +35,7 @@ export default createStore({
       const response = await axios.get(
         "https://jsonplaceholder.typicode.com/todos"
       );
+      console.log(response.data);
       commit("setTasks", response.data);
     },
     addTask({ commit }, task) {
