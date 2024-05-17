@@ -5,6 +5,8 @@ import createPersistedState from "vuex-persistedstate";
 export default createStore({
   state: {
     tasks: [],
+    filters: [],
+    sorters: [],
   },
   mutations: {
     setTasks(state, tasks) {
@@ -29,6 +31,12 @@ export default createStore({
         task.title = newTitle;
       }
     },
+    setFilters(state, filters) {
+      state.filters = filters;
+    },
+    setSorters(state, sorters) {
+      state.sorters = sorters;
+    },
   },
   actions: {
     async fetchTasks({ commit }) {
@@ -50,12 +58,39 @@ export default createStore({
     updateTaskTitle({ commit }, payload) {
       commit("updateTaskTitle", payload);
     },
+    setFilters({ commit }, filters) {
+      commit("setFilters", filters);
+    },
+    setSorters({ commit }, sorters) {
+      commit("setSorters", sorters);
+    },
   },
   getters: {
-    activeTasks: (state) =>
-      state.tasks.filter((task) => !task.completed).sort((a, b) => b.id - a.id),
-    completedTasks: (state) =>
-      state.tasks.filter((task) => task.completed).sort((a, b) => b.id - a.id),
+    filteredAndSortedTasks: (state) => {
+      let tasks = [...state.tasks];
+
+      // Apply filters
+      state.filters.forEach((filter) => {
+        tasks = tasks.filter(filter);
+      });
+
+      // Apply sorters
+      state.sorters.forEach((sorter) => {
+        if (typeof sorter === "function") {
+          tasks = tasks.sort(sorter);
+        } else {
+          console.error("Invalid sorter found:", sorter);
+          // Optionally, continue without applying the invalid sorter
+        }
+      });
+      return tasks;
+    },
+    activeTasks: (state) => {
+      return state.tasks.filter((task) => !task.completed);
+    },
+    completedTasks: (state) => {
+      return state.tasks.filter((task) => task.completed);
+    },
   },
-  plugins: [createPersistedState()], // Plugin hinzufügen
+  plugins: [createPersistedState()],
 });

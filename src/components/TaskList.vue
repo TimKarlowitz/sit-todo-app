@@ -1,35 +1,25 @@
 <template>
   <div>
-    <TaskItem v-for="task in tasks" :key="task.id" :task="task" />
+    <FilterAndSorter />
+    <TaskItem v-for="task in filteredAndSortedTasks" :key="task.id" :task="task" />
   </div>
 </template>
 
 <script>
-import { computed, toRefs } from 'vue';
-import { useStore } from 'vuex';
+import {  mapGetters } from 'vuex';
 import TaskItem from './TaskItem.vue';
+import FilterAndSorter from './FilterAndSorter.vue';
 
 export default {
   components: {
     TaskItem,
+    FilterAndSorter,
   },
-  props: {
-    taskType: {
-      type: String,
-      required: true,
+  computed: {
+    ...mapGetters(["filteredAndSortedTasks"]),
+    filteredTasks() {
+      return this.filteredAndSortedTasks;
     },
-  },
-  setup(props) {
-    const { taskType } = toRefs(props);
-    const store = useStore();
-    
-    const tasks = computed(() => {
-      return taskType.value === 'archivedTasks'
-        ? store.getters.completedTasks
-        : store.getters.activeTasks;
-    });
-
-    return { tasks };
   },
 };
 </script>

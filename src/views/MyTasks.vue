@@ -1,27 +1,27 @@
 <template>
+  <div>
+    <h1>My Tasks</h1>
     <div>
-      <h1>My Tasks</h1>
-      <div>
-        <h2>Add a new Task</h2>
-        <input type="text" v-model="newTaskTitle" placeholder="New Task Name"/>
-        <button @click="addTask">Add Task</button>
-      </div>
-      <h2>Your Active Tasks</h2>
-      <h3>{{ taskCount }} tasks</h3>
-      
-      <SearchInput v-model="searchVal" :clearIcon="false"/>
-
-      <TaskList v-if="searchVal===''" taskType="activeTasks"/>
-      <SearchList v-if="searchVal!=''" :searchVal="searchVal" />
-      <User :size="32" :stroke-width="2.25" />
+      <h2>Add a new Task</h2>
+      <input type="text" v-model="newTaskTitle" placeholder="New Task Name"/>
+      <button @click="addTask">Add Task</button>
     </div>
-  </template>
+    <h2>Your Active Tasks</h2>
+    <h3>You currently have {{ taskCount }} active tasks</h3>
+    
+    <SearchInput v-model="searchVal" :clearIcon="false"/>
+
+    <TaskList v-if="searchVal===''"/>
+    <SearchList v-if="searchVal!=''" :searchVal="searchVal" />
+    <User :size="32" :stroke-width="2.25" />
+  </div>
+</template>
   
-  <script setup>
+<script setup>
   import { User } from 'lucide-vue-next';
   import SearchInput from 'vue-search-input'
   import 'vue-search-input/dist/styles.css'
-import SearchList from '../components/SearchList.vue';
+  import SearchList from '../components/SearchList.vue';
   import TaskList from '../components/TaskList.vue';
   import { ref, computed } from 'vue';
   import { useStore } from 'vuex';
@@ -39,9 +39,9 @@ import SearchList from '../components/SearchList.vue';
     store.dispatch('addTask', newTaskObject);
     newTaskTitle.value = '';
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
 
-  </style>
+</style>
   
