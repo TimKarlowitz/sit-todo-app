@@ -23,7 +23,7 @@
   import 'vue-search-input/dist/styles.css'
   import SearchList from '../components/SearchList.vue';
   import TaskList from '../components/TaskList.vue';
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import { useStore } from 'vuex';
   const newTaskTitle = ref('');
   const searchVal = ref('');
@@ -39,6 +39,15 @@
     store.dispatch('addTask', newTaskObject);
     newTaskTitle.value = '';
   };
+
+  const activateCompletedFilter = () => {
+    const filterFunctions = [(task) => !task.completed];
+    console.log('The filter functions are', filterFunctions);
+    store.dispatch('setFilters', filterFunctions);
+  };
+  onMounted(() => {
+    activateCompletedFilter();
+  });
 </script>
   
 <style scoped>

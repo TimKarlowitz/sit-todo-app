@@ -5,14 +5,18 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TaskList from '../components/TaskList.vue';
-
-export default {
-  components: {
-    TaskList,
-  },
-};
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const activateCompletedFilter = () => {
+    const filterFunctions = [(task) => task.completed];
+    store.dispatch('setFilters', filterFunctions);
+  };
+  onMounted(() => {
+    activateCompletedFilter();
+  });
 </script>
 
 <style scoped>

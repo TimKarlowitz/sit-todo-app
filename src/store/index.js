@@ -5,8 +5,8 @@ import createPersistedState from "vuex-persistedstate";
 export default createStore({
   state: {
     tasks: [],
-    filters: [],
-    sorters: [],
+    filters: [(task) => !task.completed],
+    sorters: ["idDescending"],
   },
   mutations: {
     setTasks(state, tasks) {
@@ -70,10 +70,13 @@ export default createStore({
       let tasks = [...state.tasks];
 
       // Apply filters
-      state.filters.forEach((filter) => {
-        tasks = tasks.filter(filter);
+      state.filters.forEach((filter, index) => {
+        if (typeof filter === "function") {
+          tasks = tasks.filter(filter);
+        } else {
+          console.error(`Invalid filter at index ${index}:`, filter);
+        }
       });
-
       // Apply sorters
       state.sorters.forEach((sorter) => {
         if (typeof sorter === "function") {
