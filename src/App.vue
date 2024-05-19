@@ -1,19 +1,11 @@
 <template>
-  
-  <div id="app">
-    <nav>
-      <router-link to="/">My Tasks</router-link>
-      <router-link to="/archive">Archive</router-link>
-    </nav>
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 
 export default {
-  
   name: 'App',
   created() {
     this.fetchTasks();

@@ -7,22 +7,32 @@ export default createStore({
     tasks: [],
     filters: [(task) => !task.completed],
     sorters: ["idDescending"],
+    taskCount: 0,
   },
   mutations: {
     setTasks(state, tasks) {
       state.tasks = tasks.sort((a, b) => b.id - a.id);
+      state.taskCount = tasks.filter((task) => !task.completed).length;
     },
     addTask(state, task) {
       task.id = state.tasks.length + 1;
       state.tasks.push(task);
+      if (!task.completed) {
+        state.taskCount++;
+      }
     },
     toggleTaskCompletion(state, taskId) {
       const task = state.tasks.find((task) => task.id === taskId);
       if (task) {
         task.completed = !task.completed;
+        state.taskCount += task.completed ? -1 : 1;
       }
     },
     deleteTask(state, taskId) {
+      const task = state.tasks.find((task) => task.id === taskId);
+      if (task && !task.completed) {
+        state.taskCount--;
+      }
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
     },
     updateTaskTitle(state, { taskId, newTitle }) {
@@ -83,16 +93,12 @@ export default createStore({
           tasks = tasks.sort(sorter);
         } else {
           console.error("Invalid sorter found:", sorter);
-          // Optionally, continue without applying the invalid sorter
         }
       });
       return tasks;
     },
-    activeTasks: (state) => {
-      return state.tasks.filter((task) => !task.completed);
-    },
-    completedTasks: (state) => {
-      return state.tasks.filter((task) => task.completed);
+    activeTasksCount: (state) => {
+      return state.taskCount;
     },
   },
   plugins: [createPersistedState()],

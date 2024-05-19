@@ -1,13 +1,27 @@
 <template>
-  <div>
-    <p>{{ task.title }}</p>
-    <button @click="toggleTask">{{ task.completed ? 'undo' : 'complete and archive' }}</button>
-    <p>{{ task.id }}</p>
-    <button @click="handleDeleteTask">Delete</button>
-    <button @click="handleEditRequest">Edit</button>
-    <input type="text" v-if="titleEditField" v-model="newTitle" placeholder="Enter New Title"/>
-    <button v-if="titleEditField" @click="handleEditTask">Update Task Title</button>
-  </div>
+  <v-card class="mx-auto my-4" max-width="400">
+    <v-card-title>{{ task.title }}</v-card-title>
+    <v-card-subtitle>Task ID: {{ task.id }}</v-card-subtitle>
+
+    <v-card-actions>
+      <v-btn @click="toggleTask" :color="task.completed ? 'secondary' : 'primary'" class="mr-2">
+        {{ task.completed ? 'Undo' : 'Complete and Archive' }}
+      </v-btn>
+      <v-btn @click="handleDeleteTask" color="error" class="mr-2">
+        Delete
+      </v-btn>
+      <v-btn @click="handleEditRequest" color="info" class="mr-2">
+        Edit
+      </v-btn>
+    </v-card-actions>
+
+    <v-card-text v-if="titleEditField">
+      <v-text-field v-model="newTitle" label="Enter New Title" class="mb-2"></v-text-field>
+      <v-btn @click="handleEditTask" color="success">
+        Update Task Title
+      </v-btn>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
