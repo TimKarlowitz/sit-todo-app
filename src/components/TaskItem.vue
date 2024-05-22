@@ -1,16 +1,16 @@
 <template>
-  <v-card class="mx-auto my-4" max-width="400">
-    <v-card-title>{{ task.title }}</v-card-title>
-    <v-card-subtitle>Task ID: {{ task.id }}</v-card-subtitle>
+  <v-card class="mx-auto my-4" style="background-color:darkslategray;">
+    <v-card-title style="color: white;">{{ task.title }}</v-card-title>
+    <v-card-subtitle style="color: white; ;">Task ID: {{ task.id }}</v-card-subtitle>
 
-    <v-card-actions>
-      <v-btn @click="toggleTask" :color="task.completed ? 'secondary' : 'primary'" class="mr-2">
-        {{ task.completed ? 'Undo' : 'Complete and Archive' }}
+    <v-card-actions style="background-color: black;">
+      <v-btn @click="toggleTask" :color="task.completed ? 'secondary' : 'green'" class="mr-2" style="border-width: 1px; border-color: white;" >
+        {{ task.completed ? 'Undo' : 'Complete' }}
       </v-btn>
-      <v-btn @click="handleDeleteTask" color="error" class="mr-2">
+      <v-btn @click="handleDeleteTask" color="error" class="mr-2" style="border-width: 1px; border-color: white;">
         Delete
       </v-btn>
-      <v-btn @click="handleEditRequest" color="info" class="mr-2">
+      <v-btn @click="handleEditRequest" color="info" class="mr-2" style="border-width: 1px; border-color: white;">
         Edit
       </v-btn>
     </v-card-actions>

@@ -1,12 +1,8 @@
 <template>
-  <v-container class="py-4">
-    <v-card-title>
-            <v-icon class="mr-2">mdi-format-list-checks</v-icon>
-            My Active Tasks
-          </v-card-title>
+  <v-container fluid class="py-4">
     <v-row>
-      <v-col>
-        <v-card class="mx-auto my-4" max-width="600">
+      <v-col cols="12" md="6" lg="3">
+        <v-card class="mx-auto my-4" max-width="100%">
           <v-card-title>
             <v-icon class="mr-2">mdi-plus</v-icon>
             Add a New Task
@@ -26,13 +22,8 @@
     </v-row>
 
     <v-row>
-      <v-col>
-        <v-card class="mx-auto my-4" max-width="600">
-          <v-card-title>
-            <v-icon class="mr-2">mdi-progress-check</v-icon>
-            Your Active Tasks
-          </v-card-title>
-          <v-card-subtitle>You currently have {{ taskCount }} active tasks</v-card-subtitle>
+      <v-col cols="12" md="6" lg="3">
+        
           <v-card-text>
             <v-text-field
               v-model="searchVal"
@@ -44,15 +35,28 @@
               @click:clear="clearSearch"
             ></v-text-field>
             
-            <TaskList v-if="searchVal === ''" />
-            <SearchList v-if="searchVal !== ''" :searchVal="searchVal" />
+            
           </v-card-text>
+       
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" md="12" lg="12">
+        <v-card class="mx-auto my-4" max-width="100%">
+          <v-card-title>
+            <v-icon class="mr-2">mdi-progress-check</v-icon>
+            Your Active Tasks
+          </v-card-title>
+          <v-card-subtitle>You currently have {{ taskCount }} active tasks</v-card-subtitle>
+          
+          <TaskList v-if="searchVal === ''" />
+            <SearchList v-if="searchVal !== ''" :searchVal="searchVal" />
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
-
   
 <script setup>
 
