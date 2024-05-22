@@ -2,24 +2,40 @@ import { createStore } from "vuex";
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 
+// Check if there is any persisted data in local storage
+const persistedData = localStorage.getItem("tasks");
+const initialTasks = persistedData ? JSON.parse(persistedData) : [];
+
 export default createStore({
   state: {
-    tasks: [],
+    tasks: initialTasks,
     filters: [(task) => !task.completed],
     sorters: ["idDescending"],
-    taskCount: 0,
+    taskCount: initialTasks.filter((task) => !task.completed).length,
   },
   mutations: {
     setTasks(state, tasks) {
+      // Add priority field to each task if it doesn't exist
+      tasks.forEach((task) => {
+        if (task.priority === undefined) {
+          task.priority = "medium"; // Default priority
+        }
+      });
+
       state.tasks = tasks.sort((a, b) => b.id - a.id);
       state.taskCount = tasks.filter((task) => !task.completed).length;
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
     addTask(state, task) {
       task.id = state.tasks.length + 1;
+      if (task.priority === undefined) {
+        task.priority = "medium"; // Default priority
+      }
       state.tasks.push(task);
       if (!task.completed) {
         state.taskCount++;
       }
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
     toggleTaskCompletion(state, taskId) {
       const task = state.tasks.find((task) => task.id === taskId);
@@ -27,6 +43,7 @@ export default createStore({
         task.completed = !task.completed;
         state.taskCount += task.completed ? -1 : 1;
       }
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
     deleteTask(state, taskId) {
       const task = state.tasks.find((task) => task.id === taskId);
@@ -34,12 +51,21 @@ export default createStore({
         state.taskCount--;
       }
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
     updateTaskTitle(state, { taskId, newTitle }) {
       const task = state.tasks.find((task) => task.id === taskId);
       if (task) {
         task.title = newTitle;
       }
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
+    },
+    updateTaskPriority(state, { taskId, newPriority }) {
+      const task = state.tasks.find((task) => task.id === taskId);
+      if (task) {
+        task.priority = newPriority;
+      }
+      localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
     setFilters(state, filters) {
       state.filters = filters;
@@ -50,11 +76,13 @@ export default createStore({
   },
   actions: {
     async fetchTasks({ commit }) {
-      const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/todos"
-      );
-      console.log(response.data);
-      commit("setTasks", response.data);
+      if (!persistedData) {
+        // Only fetch if there is no persisted data
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/todos"
+        );
+        commit("setTasks", response.data);
+      }
     },
     addTask({ commit }, task) {
       commit("addTask", task);
@@ -67,6 +95,9 @@ export default createStore({
     },
     updateTaskTitle({ commit }, payload) {
       commit("updateTaskTitle", payload);
+    },
+    updateTaskPriority({ commit }, payload) {
+      commit("updateTaskPriority", payload);
     },
     setFilters({ commit }, filters) {
       commit("setFilters", filters);

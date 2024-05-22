@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    
     <div>
       <v-row>
         <v-col
@@ -30,6 +31,10 @@ export default {
     ...mapGetters(["filteredAndSortedTasks"]),
     filteredTasks() {
       return this.filteredAndSortedTasks;
+    },
+    ...mapGetters(["taskCount"]),
+    taskCount() {
+      return this.taskCount;
     },
   },
 };

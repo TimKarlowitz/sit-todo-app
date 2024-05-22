@@ -21,8 +21,14 @@
         Update Task Title
       </v-btn>
     </v-card-text>
+
+    <!-- Star icon for priority -->
+    <v-icon @click="togglePriority" class="priority-icon">
+      {{ task.priority === 'high' ? 'mdi-star' : 'mdi-star-outline' }}
+    </v-icon>
   </v-card>
 </template>
+
 
 <script>
 import { ref } from 'vue';
@@ -59,7 +65,12 @@ export default {
       newTitle.value = '';
     };
 
-    return { toggleTask, handleDeleteTask, handleEditTask, handleEditRequest, titleEditField, newTitle };
+    const togglePriority = () => {
+      const newPriority = props.task.priority === 'medium' ? 'high' : 'medium';
+      store.dispatch('updateTaskPriority', { taskId: props.task.id, newPriority });
+    };
+
+    return { toggleTask, handleDeleteTask, handleEditTask, handleEditRequest, togglePriority, titleEditField, newTitle };
   },
 };
 </script>
@@ -119,4 +130,13 @@ export default {
   border-width: 1px;
   border-radius: 10px;
 }
+
+.priority-icon {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  cursor: pointer;
+  color: gold; /* Color for the star icon */
+}
 </style>
+

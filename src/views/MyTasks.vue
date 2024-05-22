@@ -16,6 +16,13 @@
       </v-col>
     </v-row>
 
+   
+    <v-row>
+      <v-col>
+        <p class="task-count">You currently have {{ taskCount }} active Tasks</p>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col>
         <TaskList v-if="searchVal === ''" />
@@ -132,5 +139,9 @@ onMounted(() => {
     padding-left: 100px;
     padding-right: 100px;
   }
+}
+.task-count {
+  color: white;
+  font-size: 20px;
 }
 </style>
