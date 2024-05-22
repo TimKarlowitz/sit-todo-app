@@ -8,12 +8,11 @@
         offset-y
         activator="parent"
         transition="scale-transition"
-        
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon v-bind="attrs" v-on="on">mdi-sort</v-icon>
         </template>
-        <v-list  class="white-text">
+        <v-list class="white-text">
           <v-list-item
             v-for="option in sortOptions"
             :key="option.value"
@@ -23,13 +22,24 @@
             <v-list-item-title class="white-text">{{ option.label }}</v-list-item-title>
           </v-list-item>
         </v-list>
-      </v-menu class="white-text">
-      {{ sortOptions.find((option) => option.value === sorter).label}}
+      </v-menu>
+      {{ sortOptions.find((option) => option.value === sorter).label }}
+    </v-card-title>
+
+    <!-- Priority Filter -->
+    <v-card-title class="card-title">
+      <v-checkbox
+        v-model="priorityFilter"
+        label="Show only high priority"
+        @change="updatePriorityFilter"
+      ></v-checkbox>
     </v-card-title>
   </v-card>
 </template>
 
 <script>
+import store from '../store';
+
 export default {
   data() {
     return {
@@ -40,6 +50,7 @@ export default {
         { label: "ID Ascending", value: "idAscending" },
         { label: "Title Alphabetically", value: "titleAlphabetically" },
       ],
+      priorityFilter: false, // State for priority filter
     };
   },
   mounted() {
@@ -60,8 +71,10 @@ export default {
       } else if (this.sorter === "titleAlphabetically") {
         sortFunctions.push((a, b) => a.title.localeCompare(b.title));
       }
-      console.log("The sort functions are", sortFunctions);
       this.$store.dispatch("setSorters", sortFunctions);
+    },
+    updatePriorityFilter() {
+      this.$store.dispatch("setFilterPriorityHigh", this.priorityFilter);
     },
   },
 };

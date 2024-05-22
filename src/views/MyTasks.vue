@@ -97,9 +97,8 @@ const addTask = () => {
 };
 
 const activateCompletedFilter = () => {
-  const filterFunctions = [(task) => !task.completed];
-  console.log('The filter functions are', filterFunctions);
-  store.dispatch('setFilters', filterFunctions);
+  // Set the filter to show archived (completed) tasks
+  store.dispatch('setFilterActive', true);
 };
 
 onMounted(() => {

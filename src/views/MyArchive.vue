@@ -29,7 +29,7 @@
 import 'vue-search-input/dist/styles.css';
 import SearchList from '../components/SearchList.vue';
 import TaskList from '../components/TaskList.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import FilterAndSorter from '../components/FilterAndSorter.vue';
 
@@ -41,8 +41,8 @@ const clearSearch = () => {
 };
 
 const activateCompletedFilter = () => {
-  const filterFunctions = [(task) => task.completed];
-  store.dispatch('setFilters', filterFunctions);
+  // Set the filter to show archived (completed) tasks
+  store.dispatch('setFilterActive', false);
 };
 
 onMounted(() => {

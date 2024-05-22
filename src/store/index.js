@@ -6,13 +6,20 @@ import createPersistedState from "vuex-persistedstate";
 const persistedData = localStorage.getItem("tasks");
 const initialTasks = persistedData ? JSON.parse(persistedData) : [];
 
-export default createStore({
-  state: {
+const getDefaultState = () => {
+  return {
     tasks: initialTasks,
-    filters: [(task) => !task.completed],
+    filters: {
+      showActive: true,
+      showPriorityHigh: false,
+    },
     sorters: ["idDescending"],
     taskCount: initialTasks.filter((task) => !task.completed).length,
-  },
+  };
+};
+
+const store = createStore({
+  state: getDefaultState(),
   mutations: {
     setTasks(state, tasks) {
       // Add priority field to each task if it doesn't exist
@@ -67,11 +74,17 @@ export default createStore({
       }
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
-    setFilters(state, filters) {
-      state.filters = filters;
+    setFilterActive(state, showActive) {
+      state.filters.showActive = showActive;
+    },
+    setFilterPriorityHigh(state, showPriorityHigh) {
+      state.filters.showPriorityHigh = showPriorityHigh;
     },
     setSorters(state, sorters) {
       state.sorters = sorters;
+    },
+    resetState(state) {
+      Object.assign(state, getDefaultState());
     },
   },
   actions: {
@@ -99,25 +112,33 @@ export default createStore({
     updateTaskPriority({ commit }, payload) {
       commit("updateTaskPriority", payload);
     },
-    setFilters({ commit }, filters) {
-      commit("setFilters", filters);
+    setFilterActive({ commit }, showActive) {
+      commit("setFilterActive", showActive);
+    },
+    setFilterPriorityHigh({ commit }, showPriorityHigh) {
+      commit("setFilterPriorityHigh", showPriorityHigh);
     },
     setSorters({ commit }, sorters) {
       commit("setSorters", sorters);
+    },
+    resetState({ commit }) {
+      commit("resetState");
     },
   },
   getters: {
     filteredAndSortedTasks: (state) => {
       let tasks = [...state.tasks];
 
-      // Apply filters
-      state.filters.forEach((filter, index) => {
-        if (typeof filter === "function") {
-          tasks = tasks.filter(filter);
-        } else {
-          console.error(`Invalid filter at index ${index}:`, filter);
-        }
-      });
+      // Apply active/archived filter
+      tasks = tasks.filter((task) =>
+        state.filters.showActive ? !task.completed : task.completed
+      );
+
+      // Apply priority filter if needed
+      if (state.filters.showPriorityHigh) {
+        tasks = tasks.filter((task) => task.priority === "high");
+      }
+
       // Apply sorters
       state.sorters.forEach((sorter) => {
         if (typeof sorter === "function") {
@@ -126,6 +147,7 @@ export default createStore({
           console.error("Invalid sorter found:", sorter);
         }
       });
+
       return tasks;
     },
     activeTasksCount: (state) => {
@@ -134,3 +156,5 @@ export default createStore({
   },
   plugins: [createPersistedState()],
 });
+
+export default store;

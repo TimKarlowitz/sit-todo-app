@@ -6,7 +6,7 @@
       </div>
       <v-card-actions class="task-actions">
         <v-btn @click="toggleTask" class="complete-btn" outlined>
-          Complete
+          {{ task.completed ? 'Make Active' : 'Complete' }}
         </v-btn>
         <v-btn @click="handleDeleteTask" class="delete-btn" outlined>
           Delete
