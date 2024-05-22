@@ -1,26 +1,29 @@
 <template>
-  <v-card class="mx-auto my-4" max-width="400">
-    <v-card-title>
+  <v-card class="sort-menu" max-width="400">
+    <v-card-title class="card-title">
       <v-menu
+        class="v-menu"
         v-model="menu"
         :close-on-content-click="false"
         offset-y
         activator="parent"
         transition="scale-transition"
+        
       >
         <template v-slot:activator="{ on, attrs }">
           <v-icon v-bind="attrs" v-on="on">mdi-sort</v-icon>
         </template>
-        <v-list>
+        <v-list  class="white-text">
           <v-list-item
             v-for="option in sortOptions"
             :key="option.value"
             @click="selectSorter(option.value)"
+            class="white-text"
           >
-            <v-list-item-title>{{ option.label }}</v-list-item-title>
+            <v-list-item-title class="white-text">{{ option.label }}</v-list-item-title>
           </v-list-item>
         </v-list>
-      </v-menu>
+      </v-menu class="white-text">
       {{ sortOptions.find((option) => option.value === sorter).label}}
     </v-card-title>
   </v-card>
@@ -63,3 +66,25 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.sort-menu {
+  margin-bottom: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+  border-color: white;
+  background-color: #2c2c2c;
+  border-width: 1px;
+}
+.white-text {
+  background-color: #2c2c2c;
+  color: white;
+}
+.card-title {
+  background-color: #2c2c2c;
+  color: white;
+}
+.v-menu {
+  color: #2c2c2c;
+}
+</style>

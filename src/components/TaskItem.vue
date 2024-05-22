@@ -1,19 +1,19 @@
 <template>
-  <v-card class="mx-auto my-4" style="background-color:darkslategray;">
-    <v-card-title style="color: white;">{{ task.title }}</v-card-title>
-    <v-card-subtitle style="color: white; ;">Task ID: {{ task.id }}</v-card-subtitle>
-
-    <v-card-actions style="background-color: black;">
-      <v-btn @click="toggleTask" :color="task.completed ? 'secondary' : 'green'" class="mr-2" style="border-width: 1px; border-color: white;" >
-        {{ task.completed ? 'Undo' : 'Complete' }}
-      </v-btn>
-      <v-btn @click="handleDeleteTask" color="error" class="mr-2" style="border-width: 1px; border-color: white;">
-        Delete
-      </v-btn>
-      <v-btn @click="handleEditRequest" color="info" class="mr-2" style="border-width: 1px; border-color: white;">
-        Edit
-      </v-btn>
-    </v-card-actions>
+  <v-card class="task-item mx-auto my-4">
+    <v-card-title class="task-title">
+      <div class="task-title-text">
+        {{ task.title }}
+      </div>
+      <v-card-actions class="task-actions">
+        <v-btn @click="toggleTask" class="complete-btn" outlined>
+          Complete
+        </v-btn>
+        <v-btn @click="handleDeleteTask" class="delete-btn" outlined>
+          Delete
+        </v-btn>
+      </v-card-actions>
+      <v-icon @click="handleEditRequest" small class="edit-icon">mdi-pencil</v-icon>
+    </v-card-title>
 
     <v-card-text v-if="titleEditField">
       <v-text-field v-model="newTitle" label="Enter New Title" class="mb-2"></v-text-field>
@@ -65,5 +65,58 @@ export default {
 </script>
 
 <style scoped>
-/* Add your specific styles here */
+.task-item {
+  background-color: #2c2c2c;
+  color: white;
+  border: 1px solid #6d28d9;
+  border-radius: 8px;
+  padding: 16px;
+  position: relative; /* To position the edit icon */
+}
+
+.task-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.task-title-text {
+  flex-grow: 1;
+  word-wrap: break-word; /* Ensure long words break to avoid overflow */
+  white-space: pre-wrap; /* Preserve whitespace and wrap as needed */
+}
+
+.edit-icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  cursor: pointer;
+  background-color: gray;
+  color: white;
+  border-radius: 50%;
+  padding: 20px;
+  font-size: 16px; /* Smaller size for the icon */
+}
+
+.task-actions {
+  display: flex;
+  flex-direction: column; /* Ensure the buttons are in a column */
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.complete-btn {
+  color: green;
+  border-color: green;
+  border-width: 1px;
+  border-radius: 10px;
+}
+
+.delete-btn {
+  color: red;
+  border-color: red;
+  border-width: 1px;
+  border-radius: 10px;
+}
 </style>

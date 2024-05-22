@@ -1,27 +1,44 @@
 <template>
-  <v-container class="py-4">
+  <v-container fluid class="py-4 custom-padding">
+    <v-row class="mb-4" align="start" justify="space-between">
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="searchVal"
+          clearable
+          label="Search"
+          variant="outlined"
+          class="search-input"
+          @click:clear="clearSearch"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <FilterAndSorter />
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col>
-        <v-card class="mx-auto my-4" max-width="600">
-          <v-card-title>
-            <v-icon class="mr-2">mdi-archive</v-icon>
-            Archive
-          </v-card-title>
-          <v-card-text>
-            <TaskList taskType="archivedTasks" />
-          </v-card-text>
-        </v-card>
+        <TaskList taskType="archivedTasks" v-if="searchVal === ''" />
+        <SearchList v-if="searchVal !== ''" :searchVal="searchVal" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
+import 'vue-search-input/dist/styles.css';
+import SearchList from '../components/SearchList.vue';
 import TaskList from '../components/TaskList.vue';
-import { onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import FilterAndSorter from '../components/FilterAndSorter.vue';
 
+const searchVal = ref('');
 const store = useStore();
+
+const clearSearch = () => {
+  searchVal.value = '';
+};
 
 const activateCompletedFilter = () => {
   const filterFunctions = [(task) => task.completed];
@@ -33,7 +50,18 @@ onMounted(() => {
 });
 </script>
 
-
 <style scoped>
-/* Füge hier deine spezifischen Styles hinzu */
+.search-input {
+  color: white;
+}
+.custom-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+@media (min-width: 992px) {
+  .custom-padding {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
 </style>

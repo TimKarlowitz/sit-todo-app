@@ -1,9 +1,8 @@
 <template>
   <div>
     <TaskItem v-for="task in tasks" :key="task.id" :task="task" />
-    <!-- Display a message if no tasks are present -->
-    <div v-if="isTaskListEmpty">
-      <p>No tasks match your search.</p>
+    <div v-if="tasks.length === 0">
+      <p style="color: white;">No tasks match your search.</p>
     </div>
   </div>
 </template>

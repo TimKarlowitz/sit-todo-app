@@ -1,20 +1,19 @@
 <template>
   <v-container fluid>
     <div>
-      <FilterAndSorter />
-    
-        <v-row>
-          <v-col
-            v-for="task in filteredAndSortedTasks"
-            :key="task.id"
-            cols="12" sm="12" md="6" lg="6"
-          >
-            <TaskItem :task="task" />
-          </v-col>
-        </v-row>
+      <v-row>
+        <v-col
+          v-for="task in filteredAndSortedTasks"
+          :key="task.id"
+          cols="12" sm="12" md="6" lg="6"
+        >
+          <TaskItem :task="task" />
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
+
 
 
 <script>
