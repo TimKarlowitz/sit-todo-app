@@ -1,4 +1,4 @@
-<template>
+<template> <!--This component is used to  organize the TaskItems and Provide Styling to the page-->
   <v-container fluid>
     
     <div>

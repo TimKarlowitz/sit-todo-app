@@ -3,7 +3,9 @@
     <v-card-title class="task-title">
       <div class="task-title-text">
         {{ task.title }}
+        
       </div>
+      <!--Complete/Make Active and Delete Buttons below each other -->
       <v-card-actions class="task-actions">
         <v-btn @click="toggleTask" class="complete-btn" outlined>
           {{ task.completed ? 'Make Active' : 'Complete' }}
@@ -12,9 +14,11 @@
           Delete
         </v-btn>
       </v-card-actions>
+      <!--Edit Title Icon button -->
       <v-icon @click="handleEditRequest" small class="edit-icon">mdi-pencil</v-icon>
     </v-card-title>
 
+    <!--conditionally render the Title Text Edit field based on titleEditfield Value -->
     <v-card-text v-if="titleEditField">
       <v-text-field v-model="newTitle" label="Enter New Title" class="mb-2"></v-text-field>
       <v-btn @click="handleEditTask" color="success">
@@ -22,7 +26,7 @@
       </v-btn>
     </v-card-text>
 
-    <!-- Star icon for priority -->
+    <!-- Star icon for priority toggle-->
     <v-icon @click="togglePriority" class="priority-icon">
       {{ task.priority === 'high' ? 'mdi-star' : 'mdi-star-outline' }}
     </v-icon>
@@ -42,6 +46,7 @@ export default {
     },
   },
   setup(props) {
+    //Following Code is explained in the Data Store and explanaition here would be Boilerplate 
     const store = useStore();
     const titleEditField = ref(false);
     const newTitle = ref('');
@@ -82,7 +87,7 @@ export default {
   border: 1px solid #6d28d9;
   border-radius: 8px;
   padding: 16px;
-  position: relative; /* To position the edit icon */
+  position: relative;
 }
 
 .task-title {
@@ -94,8 +99,8 @@ export default {
 
 .task-title-text {
   flex-grow: 1;
-  word-wrap: break-word; /* Ensure long words break to avoid overflow */
-  white-space: pre-wrap; /* Preserve whitespace and wrap as needed */
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .edit-icon {
@@ -106,13 +111,13 @@ export default {
   background-color: gray;
   color: white;
   border-radius: 50%;
-  padding: 20px;
-  font-size: 16px; /* Smaller size for the icon */
+  padding: 15px;
+  font-size: 20px;
 }
 
 .task-actions {
   display: flex;
-  flex-direction: column; /* Ensure the buttons are in a column */
+  flex-direction: column;
   align-items: flex-end;
   gap: 8px;
 }
@@ -136,7 +141,7 @@ export default {
   bottom: 8px;
   left: 8px;
   cursor: pointer;
-  color: gold; /* Color for the star icon */
+  color: gold;
 }
 </style>
 

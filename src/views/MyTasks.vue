@@ -1,6 +1,8 @@
-<template>
+<template> <!--Main Screen and first Screen user sees when mounting -->
   <v-container fluid class="py-4 custom-padding">
     <v-row class="mb-4" align="start" justify="space-between">
+      
+      <!--Search Bar -->
       <v-col cols="12" md="6">
         <v-text-field
           v-model="searchVal"
@@ -11,18 +13,21 @@
           @click:clear="clearSearch"
         ></v-text-field>
       </v-col>
+
+      <!--Filter and Sorter Component-->
       <v-col cols="12" md="6">
         <FilterAndSorter />
       </v-col>
     </v-row>
 
-   
+    <!--Active Task Count Display -->
     <v-row>
       <v-col>
         <p class="task-count">You currently have {{ taskCount }} active Tasks</p>
       </v-col>
     </v-row>
 
+    <!--Task List and Search List Components (Search List is only visible when the searchValue is not empty)-->
     <v-row>
       <v-col>
         <TaskList v-if="searchVal === ''" />
@@ -30,6 +35,7 @@
       </v-col>
     </v-row>
 
+    <!--Floating Action Button Bottom Right Corner to Add a New Task -->
     <v-btn
       fab
       @click="openAddTaskDialog"
@@ -38,6 +44,7 @@
       <v-icon style="color: white;" large>mdi-plus</v-icon>
     </v-btn>
 
+    <!--Dialog to Add a New Task is only shown when FAB is pressed -->
     <v-dialog v-model="addTaskDialog" max-width="500px">
       <v-card>
         <v-card-title>
@@ -86,13 +93,13 @@ const openAddTaskDialog = () => {
 
 const addTask = () => {
   const newTaskObject = {
-    userId: 1,
-    id: Date.now(), // Use a timestamp as a unique ID
+    userId: 1, // Hardcoded user ID, could be dynamic in a real application
+    id: Date.now(), // Use a timestamp as a unique ID (not recommended for production use, use UUIDS instead) WARN!
     title: newTaskTitle.value,
-    completed: false,
+    completed: false, // New tasks are not completed
   };
   store.dispatch('addTask', newTaskObject);
-  newTaskTitle.value = '';
+  newTaskTitle.value = ''; // Clear the input field after adding the task
   addTaskDialog.value = false; // Close the dialog after adding the task
 };
 
@@ -101,6 +108,7 @@ const activateCompletedFilter = () => {
   store.dispatch('setFilterActive', true);
 };
 
+// Activate the completed filter when the component is mounted so that the user can see the completed tasks only on the MyTasks view
 onMounted(() => {
   activateCompletedFilter();
 });
@@ -114,7 +122,7 @@ onMounted(() => {
   position: fixed;
   bottom: 16px;
   right: 16px;
-  z-index: 1000; /* Ensure the button is on top of other elements */
+  z-index: 1000;
   width: 100px;
   height: 100px;
   display: flex;

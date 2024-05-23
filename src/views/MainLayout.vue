@@ -1,4 +1,4 @@
-<template>
+<template> <!--Sets up the App Bar where the user can switch between Active and Archive Screen -->
   <v-app class="app">
     <v-app-bar app class="app-bar">
       <router-link to="/" class="nav-link">

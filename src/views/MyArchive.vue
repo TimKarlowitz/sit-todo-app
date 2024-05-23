@@ -1,6 +1,8 @@
-<template>
+<template> <!--This component is basically the same as the MyTasks but only shows completed tasks and does not have the option to add new tasks -->
   <v-container fluid class="py-4 custom-padding">
     <v-row class="mb-4" align="start" justify="space-between">
+
+      <!--Seach Bar-->
       <v-col cols="12" md="6">
         <v-text-field
           v-model="searchVal"
@@ -15,7 +17,8 @@
         <FilterAndSorter />
       </v-col>
     </v-row>
-
+    
+    <!--Doenst show the Task Count but the Task and Search List -->
     <v-row>
       <v-col>
         <TaskList taskType="archivedTasks" v-if="searchVal === ''" />

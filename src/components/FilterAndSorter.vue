@@ -1,6 +1,7 @@
 <template>
   <v-card class="sort-menu" max-width="400">
     <v-card-title class="card-title">
+      <!--Sort Menu-->
       <v-menu
         class="v-menu"
         v-model="menu"
@@ -27,14 +28,14 @@
     </v-card-title>
 
     <!-- Priority Filter -->
-    <v-card-title class="card-title">
+  </v-card>
+  <v-card-title class="card-title">
       <v-checkbox
         v-model="priorityFilter"
         label="Show only high priority"
         @change="updatePriorityFilter"
       ></v-checkbox>
     </v-card-title>
-  </v-card>
 </template>
 
 <script>
@@ -43,6 +44,10 @@ import store from '../store';
 export default {
   data() {
     return {
+      //sets the default state of the menu to false
+      //sets the default sorter to idDescending
+      //defines the sort options
+      //sets the default state of the priority filter to false
       menu: false,
       sorter: "idDescending",
       sortOptions: [
@@ -50,10 +55,11 @@ export default {
         { label: "ID Ascending", value: "idAscending" },
         { label: "Title Alphabetically", value: "titleAlphabetically" },
       ],
-      priorityFilter: false, // State for priority filter
+      priorityFilter: false,
     };
   },
   mounted() {
+    //updates the sorters when the component is mounted
     this.updateSorters();
   },
   methods: {
@@ -62,6 +68,7 @@ export default {
       this.updateSorters();
       this.menu = false;
     },
+    //updates the sorters in the store based on the selected sorter (onMount and when the sorter is changed)
     updateSorters() {
       const sortFunctions = [];
       if (this.sorter === "idDescending") {
@@ -94,7 +101,7 @@ export default {
   color: white;
 }
 .card-title {
-  background-color: #2c2c2c;
+  
   color: white;
 }
 .v-menu {

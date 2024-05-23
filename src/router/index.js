@@ -4,6 +4,7 @@ import Archive from "../views/MyArchive.vue";
 import MainLayout from "@/views/MainLayout.vue";
 
 const routes = [
+  //redirects to MainLayout where the MyTasks/Archive Screens are displayed
   {
     path: "/",
     component: MainLayout,

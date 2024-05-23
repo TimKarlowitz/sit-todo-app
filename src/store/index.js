@@ -22,19 +22,21 @@ const store = createStore({
   state: getDefaultState(),
   mutations: {
     setTasks(state, tasks) {
-      // Add priority field to each task if it doesn't exist
+      // Add priority field to each task if it doesn't exist (wont exist in fetched data)
       tasks.forEach((task) => {
         if (task.priority === undefined) {
           task.priority = "medium"; // Default priority
         }
       });
-
+      // Sort tasks by id in descending order
       state.tasks = tasks.sort((a, b) => b.id - a.id);
+      // Update active tasks count
       state.taskCount = tasks.filter((task) => !task.completed).length;
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
+
+    // Add a new task with default priority (task Object is passed as payload and created in MyTasks.vue)
     addTask(state, task) {
-      task.id = state.tasks.length + 1;
       if (task.priority === undefined) {
         task.priority = "medium"; // Default priority
       }
@@ -44,6 +46,8 @@ const store = createStore({
       }
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
+
+    // Toggle task completion status from completed to active and vice versa
     toggleTaskCompletion(state, taskId) {
       const task = state.tasks.find((task) => task.id === taskId);
       if (task) {
@@ -52,6 +56,8 @@ const store = createStore({
       }
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
+
+    // Delete a task from the tasks array based on taskId passed as payload
     deleteTask(state, taskId) {
       const task = state.tasks.find((task) => task.id === taskId);
       if (task && !task.completed) {
@@ -60,6 +66,8 @@ const store = createStore({
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
+
+    // Update task title based on taskId and newTitle passed as payload
     updateTaskTitle(state, { taskId, newTitle }) {
       const task = state.tasks.find((task) => task.id === taskId);
       if (task) {
@@ -67,6 +75,8 @@ const store = createStore({
       }
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
+
+    // Update task priority based on taskId and newPriority passed as payload
     updateTaskPriority(state, { taskId, newPriority }) {
       const task = state.tasks.find((task) => task.id === taskId);
       if (task) {
@@ -74,17 +84,20 @@ const store = createStore({
       }
       localStorage.setItem("tasks", JSON.stringify(state.tasks)); // Save to local storage
     },
+
+    // Set active/archived filter based on showActive passed as payload (happens when user switches between active and archived task Screens)
     setFilterActive(state, showActive) {
       state.filters.showActive = showActive;
     },
+
+    // Set priority filter based on showPriorityHigh passed as payload (happens when user switches priority filter in FilterAndSort.vue)
     setFilterPriorityHigh(state, showPriorityHigh) {
       state.filters.showPriorityHigh = showPriorityHigh;
     },
+
+    // Set sorters based on sorters passed as payload (happens when user changes sorting in FilterAndSort.vue)
     setSorters(state, sorters) {
       state.sorters = sorters;
-    },
-    resetState(state) {
-      Object.assign(state, getDefaultState());
     },
   },
   actions: {
@@ -121,20 +134,17 @@ const store = createStore({
     setSorters({ commit }, sorters) {
       commit("setSorters", sorters);
     },
-    resetState({ commit }) {
-      commit("resetState");
-    },
   },
   getters: {
     filteredAndSortedTasks: (state) => {
       let tasks = [...state.tasks];
 
-      // Apply active/archived filter
+      // Apply active/archived filter based on showActive
       tasks = tasks.filter((task) =>
         state.filters.showActive ? !task.completed : task.completed
       );
 
-      // Apply priority filter if needed
+      // Apply priority filter based on showPriorityHigh
       if (state.filters.showPriorityHigh) {
         tasks = tasks.filter((task) => task.priority === "high");
       }
@@ -147,9 +157,10 @@ const store = createStore({
           console.error("Invalid sorter found:", sorter);
         }
       });
-
+      //return the filtered and sorted tasks for the components to use
       return tasks;
     },
+    //just returns the active task count
     activeTasksCount: (state) => {
       return state.taskCount;
     },

@@ -7,6 +7,7 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
+  // Fetch tasks when the app is created to ensure that the tasks are loaded (no loading animation is shown)
   created() {
     this.fetchTasks();
   },
